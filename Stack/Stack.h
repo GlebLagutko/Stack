@@ -14,6 +14,12 @@ public:
 	virtual ~Visitor() = default;
 };
 
+class Increase : public Visitor {
+public:
+	void visit(Stack& st);
+
+};
+
 class Iterator {
 public:
 	virtual void First() = 0;
@@ -200,8 +206,3 @@ public:
 	}
 };
 
-class Increase : public Visitor {
-public :
-	void visit(Stack& st);
-	
-};
