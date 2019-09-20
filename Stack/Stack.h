@@ -2,11 +2,17 @@
 #pragma once
 #include <iostream>
 #include <stdexcept>
-#include "StackIterator.h"
 
 class Stack;
 
 using namespace std;
+
+class Visitor
+{
+public:
+	virtual void visit(Stack &ref) = 0;
+	virtual ~Visitor() = default;
+};
 
 class Iterator {
 public:
@@ -53,8 +59,12 @@ public:
 		current++;
 		return *this;
 	}
+	
+	Stacklterator& operator-- (int) {
+		current--;
+		return *this;
+	}
 };
-
 
 class Stack
 {
@@ -102,6 +112,8 @@ public:
 
 	}
 
+	void accept(Visitor &v);
+
 	void Swap(Stack& secondStack);
 
 	//void resize();
@@ -116,9 +128,34 @@ public:
 
 	int Size();
 
+	int* GetPtr() const {
+		return ptr;
+	}
+
+	void SetPtr(int* ptr)	{
+		this->ptr = ptr;
+	}
+
+	int GetSize() const {
+		return size;
+	}
+
+	void SetSize(int size) {
+		this->size = size;
+	}
+
+	int GetCapacity() const	{
+		return capacity;
+	}
+
+	void SetCapacity(int capacity) {
+		this->capacity = capacity;
+	}
+
 	void Clear();
 
 	friend Stacklterator;
+	friend Iterator;
 
 
 	Stack& operator=(const Stack& other) {
@@ -149,9 +186,13 @@ public:
 	}
 
 	friend bool operator==(const Stack& lhs, const Stack& rhs) {
-		return lhs.ptr == rhs.ptr
-			&& lhs.size == rhs.size
-			&& lhs.capacity == rhs.capacity;
+		if (lhs.size != rhs.size) { return false; }
+		if (lhs.capacity != rhs.capacity) { return false; }
+		for (int i = 0; i < rhs.capacity; i++)
+		{
+			if (lhs.ptr[i] != rhs.ptr[i]) { return false; }
+		}
+		return true;
 	}
 
 	friend bool operator!=(const Stack& lhs, const Stack& rhs) {
@@ -159,7 +200,8 @@ public:
 	}
 };
 
-
-
-
-
+class Increase : public Visitor {
+public :
+	void visit(Stack& st);
+	
+};

@@ -1,4 +1,5 @@
 #include "Stack.h"
+#include "StackIterator.h"
 using namespace std;
 
 int main()
@@ -12,11 +13,16 @@ int main()
 
 	iter.Next();
 	iter++;
+	iter--;
 	wcout << iter.Currentltem() << " iter " << endl;
 
 	Stack st2;
 	st2.Push(9);
 	st2.Swap(st1);
+	Increase inc;
+	inc.visit(st2);
+
+
 	Stack st3(st2);
 	Stack st4(move(st1));
 
@@ -27,6 +33,9 @@ int main()
 	st2.Clear();
 	wcout << st2.IsEmpty() << endl;
 
+
+
 	system("pause");
 
 }
+

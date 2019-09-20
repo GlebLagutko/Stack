@@ -1,5 +1,5 @@
 #include "Stack.h"
-#include <cassert>
+#include "StackIterator.h"
 
 void Stacklterator::First() {
 	current = 0;
