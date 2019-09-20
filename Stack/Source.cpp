@@ -1,5 +1,6 @@
 #include "Stack.h"
-#include "StackIterator.h"
+
+
 using namespace std;
 
 int main()

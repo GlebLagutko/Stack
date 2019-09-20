@@ -1,5 +1,5 @@
 #include "Stack.h"
-#include "StackIterator.h"
+
 
 void Stacklterator::First() {
 	current = 0;
