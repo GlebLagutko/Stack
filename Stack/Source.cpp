@@ -15,13 +15,15 @@ int main()
 	iter.Next();
 	iter++;
 	iter--;
-	wcout << iter.Currentltem() << " iter " << endl;
+	
 
 	Stack st2;
 	st2.Push(9);
 	st2.Swap(st1);
-	Increase inc;
-	inc.visit(st2);
+	
+
+	cout << "Sum " << st2.GetSum() << endl;
+
 
 
 	Stack st3(st2);

@@ -5,9 +5,7 @@
 
 using namespace std;
 
-void Stack::accept(Visitor &instance) {
-	instance.visit(*this);
-}
+
 
 void Stack::resize() {
 	int newSize = size * 2;
@@ -80,17 +78,28 @@ void Stack::Swap(Stack& secondStack) {
 	swap(ptr, secondStack.ptr);
 }
 
+int Stack::GetSum() {
+	SumElement sum;
+	Stacklterator iter(this);
+
+	for(iter.First() ; !iter.IsDone() ; iter++) {
+		sum.visit(iter.Currentltem());
+	}
+	return sum.GeSum();
+	
+}
+
+
 
 
 /////////////////////////////////////////////
 //VISITOR METHODS
 /////////////////////////////////////////////
 
-void Increase::visit(Stack& st) {
+void SumElement::visit(int st) {
 
-	int* a = st.GetPtr();
-	for (int i = 0; i < st.GetCapacity(); i++)
-		a[i]++;
+	int a = this->GeSum();
+	this->SetSum(a + st);
 }
 
 

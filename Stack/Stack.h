@@ -4,21 +4,37 @@
 #include <stdexcept>
 
 class Stack;
+class ElementInt;
 
 using namespace std;
 
-class Visitor
-{
+class Visitor {
 public:
-	virtual void visit(Stack &ref) = 0;
+	virtual void visit(int) = 0;
 	virtual ~Visitor() = default;
+
 };
 
-class Increase : public Visitor {
+class SumElement : public Visitor {
+	int sum;
 public:
-	void visit(Stack& st);
+	void visit(int st);
 
+	SumElement() : sum(0) {};
+
+
+	int GeSum() const
+	{
+		return sum;
+	}
+
+	void SetSum(int sum)
+	{
+		this->sum = sum;
+	}
 };
+
+
 
 class Iterator {
 public:
@@ -47,8 +63,7 @@ public:
 
 
 	friend bool operator==(const Stacklterator& lhs, const Stacklterator& rhs) {
-		return lhs._stack == rhs._stack
-			&& lhs.current == rhs.current;
+		return lhs.current == rhs.current;
 	}
 
 	friend bool operator!=(const Stacklterator& lhs, const Stacklterator& rhs){
@@ -133,6 +148,8 @@ public:
 	void Pop();
 
 	int Size();
+
+	int GetSum();
 
 	int* GetPtr() const {
 		return ptr;
