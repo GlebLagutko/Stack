@@ -115,12 +115,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="MVC.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Stack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Stack.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

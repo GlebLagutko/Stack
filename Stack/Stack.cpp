@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Stack.h"
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 
@@ -78,16 +79,28 @@ void Stack::Swap(Stack& secondStack) {
 	swap(ptr, secondStack.ptr);
 }
 
-int Stack::GetSum() {
-	SumElement sum;
+int Stack::CalcSum() {
+	SumElementVisitor sum;
 	Stacklterator iter(this);
 
-	for(iter.First() ; !iter.IsDone() ; iter++) {
+	for(iter.First() ; !iter.IsDone() ; iter++) 
 		sum.visit(iter.Currentltem());
-	}
-	return sum.GeSum();
+	
+	return sum.GetSum();
 	
 }
+
+
+string Stack::ToString() {
+	ToStringVisitor str;
+	Stacklterator iter(this);
+
+	for (iter.First(); !iter.IsDone(); iter++)
+		str.visit(iter.Currentltem());
+	return str.GetString();
+}
+
+
 
 
 
@@ -96,11 +109,14 @@ int Stack::GetSum() {
 //VISITOR METHODS
 /////////////////////////////////////////////
 
-void SumElement::visit(int st) {
-
-	int a = this->GeSum();
-	this->SetSum(a + st);
+void SumElementVisitor::visit(int elem) {
+	sum += elem;
 }
+
+void ToStringVisitor::visit(int elem) {
+	stackString += to_string(elem) + " ";
+}
+
 
 
 /*void GetSize::visit(Stack& instance) {

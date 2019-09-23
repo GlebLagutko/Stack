@@ -15,22 +15,31 @@ public:
 
 };
 
-class SumElement : public Visitor {
+class SumElementVisitor : public Visitor {
 	int sum;
 public:
-	void visit(int st);
+	void visit(int elem);
 
-	SumElement() : sum(0) {};
+	SumElementVisitor() : sum(0) {};
 
 
-	int GeSum() const
-	{
+	int GetSum() const {
 		return sum;
 	}
 
-	void SetSum(int sum)
-	{
-		this->sum = sum;
+};
+
+class ToStringVisitor : public Visitor {
+private:
+	string stackString;
+public :
+
+	ToStringVisitor() : stackString("Current  : ") {};
+
+	void visit(int elem);
+
+	string GetString() const {
+		return stackString;
 	}
 };
 
@@ -108,7 +117,6 @@ public:
 		: size(other.size),
 		capacity(other.capacity)	 
 	{
-		delete[] ptr;
 		ptr = new int[capacity];
 		for (int i = 0; i < size; i++)
 			ptr[i] = other.ptr[i];
@@ -118,8 +126,8 @@ public:
 	Stack(Stack&& other)
 	:	size(other.size),
 		capacity(other.capacity) 
+
 	{
-		delete[] ptr;
 		ptr = new int[capacity];
 		for (int i = 0; i < size; i++)
 			ptr[i] = other.ptr[i];
@@ -133,7 +141,7 @@ public:
 
 	}
 
-	void accept(Visitor &v);
+	
 
 	void Swap(Stack& secondStack);
 
@@ -149,7 +157,9 @@ public:
 
 	int Size();
 
-	int GetSum();
+	int CalcSum();
+
+	string ToString();
 
 	int* GetPtr() const {
 		return ptr;
