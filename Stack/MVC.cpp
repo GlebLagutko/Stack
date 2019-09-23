@@ -55,6 +55,9 @@ using namespace std;
 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	static Stack st1;
+
+
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)
 	{
@@ -64,28 +67,72 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 	{
 		switch LOWORD(wParam) {
-		case IDOK:
-		{
+		case IDOK:	{
 			EndDialog(hDlg, LOWORD(wParam));
 			break;
 		}
-		case IDC_ADD:
-		{
+		case IDC_PUSH :	{
 			int a;
-			char buf[100];
-			a = GetDlgItemInt(hDlg, IDC_EDIT1, NULL, FALSE);
-			sprintf_s(buf, 100, " %d ", a);
+			
+			a = GetDlgItemInt(hDlg, IDC_EDIT_STACK, NULL, FALSE);
+			st1.Push(a);
+		
+
+			char buf[2048];
+			strcpy_s(buf, st1.ToString().c_str());
+
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, NULL, NULL);
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)buf);
+			
+				
+			break;
+		}
+		case IDC_POP: {
+			if (st1.GetCapacity() == 0)
+				break;
+			st1.Pop();
+			char buf[2048];
+			strcpy_s(buf, st1.ToString().c_str());
+
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, NULL, NULL);
 			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)buf);
 			break;
 		}
-		case IDC_DEL:
-		{
-			/*auto SelIndex = SendMessage(hDlg, LB_GETCURSEL, 0, 0L);   // LB_GETCURSEL;
-			SendMessage();*/
-			auto item = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCURSEL, NULL, NULL);
-			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, item, NULL);
-			break;
-		}
+		case IDC_CLEAR : {
+			st1.Clear();
+			char buf[2048];
+			strcpy_s(buf, st1.ToString().c_str());
+
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, NULL, NULL);
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)buf);
+				break;
+			}
+		case IDC_ISEMPTY :	{
+			// if(st1.GetCapacity() == 0)
+					
+				break;
+			}
+		case IDC_TOP :	{
+			/*char buf[2048];
+			strcpy_s(buf, st1.ToString().c_str());
+
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, NULL, NULL);
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)buf);
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)st1.Top());*/
+
+
+				break;
+			}
+		case IDC_SIZE :
+		{break; }
+		case IDC_SHOW :	{
+			char buf[2048];
+			strcpy_s(buf, st1.ToString().c_str());
+
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_DELETESTRING, NULL, NULL);
+			SendDlgItemMessage(hDlg, IDC_LIST1, LB_ADDSTRING, NULL, (LPARAM)buf);
+				break;
+			}
 		}
 	}
 
