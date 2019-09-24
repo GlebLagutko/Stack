@@ -100,40 +100,40 @@ class Stack
 {
 private:
 	int* ptr;//указатель на массив
-	int size;//размер массива
-	int capacity;// количество элемнтов в стеке
+	int capacity;//размер массива
+	int size;// количество элемнтов в стеке
 	void resize();
 	
 
 public:
 	
 	Stack(int _size = 2) {
-		size = _size;
-		capacity = 0;
-		ptr = new int[size];
+		capacity = _size;
+		size = 0;
+		ptr = new int[capacity];
 	}
 
 	Stack(const Stack& other)
-		: size(other.size),
-		capacity(other.capacity)	 
+		: capacity(other.capacity),
+		size(other.size)	 
 	{
-		ptr = new int[capacity];
-		for (int i = 0; i < size; i++)
+		ptr = new int[size];
+		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 
 	}
 
 	Stack(Stack&& other)
-	:	size(other.size),
-		capacity(other.capacity) 
+	:	capacity(other.capacity),
+		size(other.size) 
 
 	{
-		ptr = new int[capacity];
-		for (int i = 0; i < size; i++)
+		ptr = new int[size];
+		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		other.ptr = nullptr;
-		other.size = 0;
 		other.capacity = 0;
+		other.size = 0;
 	}
 
 	~Stack() {
@@ -169,21 +169,16 @@ public:
 		this->ptr = ptr;
 	}
 
-	int GetSize() const {
-		return size;
-	}
-
-	void SetSize(int size) {
-		this->size = size;
-	}
-
-	int GetCapacity() const	{
+	int GetCapacity() const {
 		return capacity;
 	}
 
-	void SetCapacity(int capacity) {
-		this->capacity = capacity;
+
+
+	int GetSize() const	{
+		return size;
 	}
+
 
 	void Clear();
 
@@ -194,11 +189,11 @@ public:
 	Stack& operator=(const Stack& other) {
 		if (this == &other)
 			return *this;
-		size = other.size;
 		capacity = other.capacity;
+		size = other.size;
 		delete[] ptr;
-		ptr = new int[capacity];
-		for (int i = 0; i < size; i++)
+		ptr = new int[size];
+		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		return *this;
 	}
@@ -206,22 +201,22 @@ public:
 	Stack& operator=(Stack&& other) {
 		if (this == &other)
 			return *this;
-		size = other.size;
 		capacity = other.capacity;
+		size = other.size;
 		delete[] ptr;
-		ptr = new int[capacity];
-		for (int i = 0; i < size; i++)
+		ptr = new int[size];
+		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		other.ptr = nullptr;
-		other.size = 0;
 		other.capacity = 0;
+		other.size = 0;
 		return *this;
 	}
 
 	friend bool operator==(const Stack& lhs, const Stack& rhs) {
-		if (lhs.size != rhs.size) { return false; }
 		if (lhs.capacity != rhs.capacity) { return false; }
-		for (int i = 0; i < rhs.capacity; i++)
+		if (lhs.size != rhs.size) { return false; }
+		for (int i = 0; i < rhs.size; i++)
 		{
 			if (lhs.ptr[i] != rhs.ptr[i]) { return false; }
 		}

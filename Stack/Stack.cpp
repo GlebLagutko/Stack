@@ -9,51 +9,51 @@ using namespace std;
 
 
 void Stack::resize() {
-	int newSize = size * 2;
+	int newSize = capacity * 2;
 	int* newStack = new int[newSize];
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < capacity; ++i) {
 		newStack[i] = ptr[i];
 	}
 	delete[] ptr;
 	ptr = newStack;
-	size = newSize;
+	capacity = newSize;
 }
 
 void Stack::Push(int element) {
-	if (capacity + 1 == size) {
+	if (size + 1 == capacity) {
 		resize();
 	}
 
-	ptr[capacity++] = element;
+	ptr[size++] = element;
 }
 
 int Stack::Top() {
-	if (capacity <= 0) {
+	if (size <= 0) {
 		throw std::out_of_range("ptr is empty");
 	}
 	else {
-		return ptr[capacity - 1];
+		return ptr[size - 1];
 	}
 }
 
 void Stack::Pop() {
-	if (capacity <= 0) {
+	if (size <= 0) {
 		throw std::out_of_range("ptr is empty");
 	}
 	else {
-		int * newStack = new int[size];
-		for (int i = 0; i < capacity - 1; ++i) {
+		int * newStack = new int[capacity];
+		for (int i = 0; i < size - 1; ++i) {
 			newStack[i] = ptr[i];
 		}
 		delete[] ptr;
 		ptr = newStack;
-		--capacity;
+		--size;
 	}
 }
 
 bool Stack::IsEmpty() {
-	if (capacity <= 0)
+	if (size <= 0)
 		return true;
 	else
 		return false;
@@ -61,21 +61,21 @@ bool Stack::IsEmpty() {
 }
 
 int Stack::Size() {
-	return capacity;
+	return size;
 }
 
 void Stack::Clear() {
 	int new_size = 20;
 	delete[] ptr;
 	ptr = new int[new_size];
-	size = new_size;
-	capacity = 0;
+	capacity = new_size;
+	size = 0;
 }
 
 void Stack::Swap(Stack& secondStack) {
 	//swap(*this, secondStack);
-	swap(size, secondStack.size);
 	swap(capacity, secondStack.capacity);
+	swap(size, secondStack.size);
 	swap(ptr, secondStack.ptr);
 }
 
@@ -119,8 +119,8 @@ void ToStringVisitor::visit(int elem) {
 
 
 
-/*void GetSize::visit(Stack& instance) {
-	value = instance.GetCapacity();
+/*void GetCapacity::visit(Stack& instance) {
+	value = instance.GetSize();
 }
 
 /*void Clear::visit(Stack& instance)
@@ -148,17 +148,17 @@ void IsPresent::visit(Set& set_instance)
 
 void Pop::visit(Stack& st1)
 {
-	if (st1.GetCapacity() <= 0) {
+	if (st1.GetSize() <= 0) {
 		throw std::out_of_range("ptr is empty");
 	}
 	else {
-		int * newStack = new int[st1.GetSize()];
-		for (int i = 0; i < st1.GetCapacity() - 1; ++i) {
+		int * newStack = new int[st1.GetCapacity()];
+		for (int i = 0; i < st1.GetSize() - 1; ++i) {
 			newStack[i] = st1.GetPtr()[i];
 		}
 		delete[] st1.GetPtr();
 		st1.SetPtr(newStack);
-		--capacity;
+		--size;
 	}
 }
 

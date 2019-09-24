@@ -10,7 +10,7 @@ void Stacklterator::Next() {
 }
 
 bool Stacklterator::IsDone() const {
-	return current >= _stack->capacity;
+	return current >= _stack->size;
 }
 
 int Stacklterator::Currentltem() const {
