@@ -30,7 +30,7 @@ void Stack::Push(int element) {
 
 int Stack::Top() {
 	if (size <= 0) {
-		throw std::out_of_range("ptr is empty");
+		throw std::out_of_range("stack is empty");
 	}
 	else {
 		return ptr[size - 1];
@@ -39,7 +39,7 @@ int Stack::Top() {
 
 void Stack::Pop() {
 	if (size <= 0) {
-		throw std::out_of_range("ptr is empty");
+		throw std::out_of_range("stack is empty");
 	}
 	else {
 		int * newStack = new int[capacity];
