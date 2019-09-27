@@ -62,20 +62,27 @@ void ShowAnswer( string str, HWND hDlg ) {
 }
 
 class View {
+private:
+	HWND _hDlg;
+	Stack* _stack;
+	int idcList;
 public :
-	void UpdateWin(string str, HWND hDlg, int IDC,operation op, int pos)
+
+	View(HWND hDlg, int IDC,Stack* stack) : _hDlg(hDlg),_stack(stack),idcList(IDC) {}
+
+	void UpdateWin(operation op, int pos)
 	{
 		switch (op) {
 		case INSERT:{
 			char buf[2048];
-			strcpy_s(buf, str.c_str());
-			SendDlgItemMessage(hDlg, IDC, LB_INSERTSTRING, pos, (LPARAM)buf);
+			strcpy_s(buf, _stack->ToString().c_str());
+			SendDlgItemMessage(_hDlg, idcList, LB_INSERTSTRING, pos, (LPARAM)buf);
 			break;
 			}
 		
 	 
 		case TO_DELETE:{
-			SendDlgItemMessage(hDlg, IDC, LB_DELETESTRING, pos, 0);
+			SendDlgItemMessage(_hDlg, idcList, LB_DELETESTRING, pos, 0);
 				
 			}
 			
@@ -89,8 +96,9 @@ public :
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static Stack st1;
-	static View v;
+	static View v(hDlg,IDC_LIST1,&st1);
 	static int pos = 0;
+
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)
 	{
@@ -103,24 +111,20 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		
 		case IDC_PUSH :	{
 			int a;
-			
-			a = GetDlgItemInt(hDlg, IDC_EDIT_STACK, NULL, FALSE);
+			a = GetDlgItemInt(hDlg, IDC_EDIT_STACK,NULL, TRUE);
+
 			st1.Push(a);
 			//ShowAnswer(st1.ToString(), hDlg);
 			pos = st1.GetSize() - 1;
-			v.UpdateWin(st1.ToString(), hDlg, IDC_LIST1,INSERT,pos);
-			
-
-			
-			
-				
+			v.UpdateWin(INSERT,pos);
+	
 			break;
 		}
 		case IDC_POP: {
 			if (st1.GetSize() == 0)
 				break;
 			st1.Pop();
-			v.UpdateWin(st1.ToString(), hDlg, IDC_LIST1,TO_DELETE,pos);
+			v.UpdateWin(TO_DELETE,pos);
 			pos = st1.GetSize() - 1;
 		//	//ShowAnswer(st1.ToString(), hDlg);
 			/*char buf[2048];
@@ -133,7 +137,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		case IDC_CLEAR : {
 			
 			for(int i = 0 ; i < st1.GetSize(); i++)
-				v.UpdateWin(st1.ToString(), hDlg, IDC_LIST1, TO_DELETE, 0);
+				v.UpdateWin( TO_DELETE, 0);
 			st1.Clear();
 			//ShowAnswer(st1.ToString(), hDlg);
 		//	v.UpdateWin(st1.ToString(), hDlg, IDC_LIST1);
@@ -152,7 +156,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 				str = "No";
 			char buf[30];
 			strcpy_s(buf, str.c_str());
-			MessageBox(NULL, buf, NULL, MB_OK);
+			MessageBox(NULL, buf, "", MB_OK);
 		//	v.UpdateWin(str, hDlg, IDC_LIST1);//ShowAnswer(str, hDlg);
 		/*	char buf[20];
 			strcpy_s(buf, str.c_str());
@@ -215,6 +219,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ int       nCmdShow)
 {
 	//MessageBox(NULL, "Hello", "Hello", MB_OK);
+
 	DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), NULL, About);
 	return 0;
 }
