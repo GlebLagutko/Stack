@@ -114,7 +114,7 @@ void SumElementVisitor::visit(int elem) {
 }
 
 void ToStringVisitor::visit(int elem) {
-	stackString += to_string(elem) + " ";
+	stackString = to_string(elem) ;
 }
 
 

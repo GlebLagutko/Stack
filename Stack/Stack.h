@@ -34,7 +34,7 @@ private:
 	string stackString;
 public :
 
-	ToStringVisitor() : stackString("Current  : ") {};
+	ToStringVisitor() : stackString("") {};
 
 	void visit(int elem);
 
