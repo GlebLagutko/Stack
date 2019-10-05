@@ -1,22 +1,22 @@
-#include "Stack.h"
+#include "List.h"
 
 
-void Stacklterator::First() {
+void Listlterator::First() {
 	current = 0;
 }
 
-void Stacklterator::Next() {
+void Listlterator::Next() {
 	current++;
 }
 
-bool Stacklterator::IsDone() const {
-	return current >= _stack->size;
+bool Listlterator::IsDone() const {
+	return current >= _list->size;
 }
 
-int Stacklterator::Currentltem() const {
+Complex& Listlterator::Currentltem() const {
 	if (IsDone())
 		throw std::out_of_range("Error");
 	else
-		return _stack->ptr[current];
+		return _list->ptr[current];
 }
 

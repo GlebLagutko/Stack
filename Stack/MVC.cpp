@@ -1,44 +1,46 @@
-#include "Stack.h"
+#include "List.h"
 #include <string>
 #include <Windows.h>
 #include "resource.h"
-#include <stdio.h>
-
+#include <cstdio>
+#include "Visitor.h"
 
 using namespace std;
-enum operation{INSERT,TO_DELETE};
+enum operation{INSERT,TO_DELETE,CLEAR};
 
 class StackView {
 private:
 	HWND _hDlg;
-	Stack* _stack;
+    List* _list;
 	int idcList;
 public :
 
-	StackView(HWND hDlg, int IDC,Stack* stack) : _hDlg(hDlg),_stack(stack),idcList(IDC) {}
+	StackView(HWND hDlg, int IDC,List* stack) : _hDlg(hDlg),_list(stack),idcList(IDC) {}
 
-	void UpdateWin(operation op, int pos) {
-		switch (op) {
-		case INSERT:{
-			char buf[2048];
-			strcpy_s(buf, _stack->ToString().c_str());
-			SendDlgItemMessage(_hDlg, idcList, LB_INSERTSTRING, pos, (LPARAM)buf);
-			break;
-			}
-		case TO_DELETE:{
-			SendDlgItemMessage(_hDlg, idcList, LB_DELETESTRING, pos, 0);				
-			}
-			
-		}
 
-	};
+
+	void UpdateAll() {
+			SendDlgItemMessage(_hDlg, idcList, LB_RESETCONTENT, 0, 0);
+			SendDlgItemMessage(_hDlg, IDC_LIST_SIZE, LB_RESETCONTENT, 0, 0);
+			Listlterator iter(_list);
+			int pos = 0;
+			ToStringComplexVisitor v;
+			for(iter.First(); !iter.IsDone(); iter++) {
+				v.visit(iter.Currentltem());
+				SendDlgItemMessage(_hDlg, idcList, LB_INSERTSTRING, pos, (LPARAM)v.GetStr().c_str());
+				pos++;
+			}
+
+			SendDlgItemMessage(_hDlg, IDC_LIST_SIZE, LB_ADDSTRING,0, (LPARAM)to_string(_list->GetSize()).c_str());
+		
+	}
 	
 };
 
 
 INT_PTR CALLBACK Controller(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
-	static Stack st1;
-	static StackView v(hDlg,IDC_LIST1,&st1);
+	static List list1;
+	static StackView v(hDlg,IDC_LIST1,&list1);
 
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)	{
@@ -48,59 +50,46 @@ INT_PTR CALLBACK Controller(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_COMMAND:	{
 		switch LOWORD(wParam) {
 		
-		case IDC_PUSH :	{
-			int a;
-			a = GetDlgItemInt(hDlg, IDC_EDIT_STACK,NULL, TRUE);
-			st1.Push(a);
-			
-			v.UpdateWin(INSERT,st1.GetSize() -  1);
+		case IDC_PUSH_BACK :	{
+			int real;
+			int imag;
+			real = GetDlgItemInt(hDlg, IDC_EDIT_REAL,NULL, TRUE);
+			imag = GetDlgItemInt(hDlg, IDC_EDIT_IMAG,NULL, TRUE);
+			Complex comp(real,imag);
+			list1.PushBack(comp);			
+			v.UpdateAll();
+			break;
+		}
+
+		case IDC_PUSH_FRONT: {
+			int real;
+			int imag;
+			real = GetDlgItemInt(hDlg, IDC_EDIT_REAL, NULL, TRUE);
+			imag = GetDlgItemInt(hDlg, IDC_EDIT_IMAG, NULL, TRUE);
+
+			Complex comp(real, imag);
+
+			list1.PushFront(comp);
+			v.UpdateAll();
 			break;
 		}
 		case IDC_POP: {
-			if (st1.GetSize() == 0)
+			if (list1.GetSize() == 0)
 				break;
-			st1.Pop();
-			v.UpdateWin(TO_DELETE, st1.GetSize() - 1);
+
+			list1.PopFront();
+			v.UpdateAll();
 			break;
 		}
-		case IDC_CLEAR : {	
-			for(int i = 0 ; i < st1.GetSize(); i++)
-				v.UpdateWin( TO_DELETE, 0);
-			st1.Clear();
-			break;
-			}
-		case IDC_ISEMPTY :	{
-			string str;
-			if (st1.GetSize() == 0)
-				str = "Yes";
-			else
-				str = "No";
-			char buf[30];
-			strcpy_s(buf, str.c_str());
-			MessageBox(NULL, buf, "", MB_OK);
-			break;
-			}
-		case IDC_TOP :	{
-			string str = "Top : " + to_string(st1.Top());
-			char buf[30];
-			strcpy_s(buf, str.c_str());
-			MessageBox(NULL, buf, "", MB_OK);
-			break;
-			}
+		
 		case IDC_SIZE :	{
-			string str = "Size: " + to_string(st1.GetSize());
+			string str = "Size: " + to_string(list1.GetSize());
 			char buf[30];
 			strcpy_s(buf, str.c_str());
 			MessageBox(NULL, buf, "", MB_OK);
 			break;
 			}
-		case IDC_SUM :	{
-			string str = "Summa: " + to_string(st1.CalcSum());
-			char buf[30];
-			strcpy_s(buf, str.c_str());
-			MessageBox(NULL, buf, "", MB_OK);
-			break;
-			}
+		
 		case IDC_EXIT: {
 			EndDialog(hDlg, LOWORD(wParam));
 			break;

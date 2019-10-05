@@ -2,6 +2,7 @@
 #pragma once
 #include <iostream>
 #include <stdexcept>
+#include "Complex.h"
 
 class List;
 class ElementInt;
@@ -16,25 +17,25 @@ public:
 	virtual void First() = 0;
 	virtual void Next() = 0;
 	virtual bool IsDone() const = 0;
-	virtual int Currentltem() const = 0;
+	virtual Complex& Currentltem() const = 0;
 protected:
 	Iterator() {};
 };
 
 class Listlterator : public Iterator {
 private:
-	List* _stack;
+	List* _list;
 	int current;
 public:
 	Listlterator(List* aStack) {
-		_stack = aStack;
+		_list = aStack;
 		current = 0;
 	}
 
 	virtual void First();
 	virtual void Next();
 	virtual bool IsDone() const;
-	virtual int Currentltem() const;
+	virtual Complex& Currentltem() const;
 
 
 	friend bool operator==(const Listlterator& lhs, const Listlterator& rhs) {
@@ -47,7 +48,7 @@ public:
 
 
 	friend void swap(Listlterator& lhs, Listlterator& rhs) {
-		swap(lhs._stack, rhs._stack);
+		swap(lhs._list, rhs._list);
 		swap(lhs.current, rhs.current);
 	}
 	
@@ -65,7 +66,7 @@ public:
 class List
 {
 private:
-	int* ptr;//указатель на массив
+	Complex* ptr;//указатель на массив
 	int capacity;//размер массива
 	int size;// количество элемнтов в стеке
 	void resize();
@@ -76,14 +77,14 @@ public:
 	List(int _size = 2) {
 		capacity = _size;
 		size = 0;
-		ptr = new int[capacity];
+		ptr = new Complex[capacity];
 	}
 
 	List(const List& other)
 		: capacity(other.capacity),
 		size(other.size)	 
 	{
-		ptr = new int[size];
+		ptr = new Complex[size];
 		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 
@@ -94,7 +95,7 @@ public:
 		size(other.size) 
 
 	{
-		ptr = new int[size];
+		ptr = new Complex[size];
 		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		other.ptr = nullptr;
@@ -109,29 +110,25 @@ public:
 
 	
 
-	void Swap(List& secondStack);
+	void Swap(List& secondList);
 
 	//void resize();
 
-	void Push(int element);
+	void PushBack(Complex& element);
 
-	int Top();
+	void PushFront(Complex& element);
 
-	bool IsEmpty();
-
-	void Pop();
+	void PopFront();
 
 	int Size();
 
-	int CalcSum();
 
-	string  ToStringTop();
 
-	int* GetPtr() const {
+	Complex* GetPtr() const {
 		return ptr;
 	}
 
-	void SetPtr(int* ptr)	{
+	void SetPtr(Complex* ptr)	{
 		this->ptr = ptr;
 	}
 
@@ -158,7 +155,7 @@ public:
 		capacity = other.capacity;
 		size = other.size;
 		delete[] ptr;
-		ptr = new int[size];
+		ptr = new Complex[size];
 		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		return *this;
@@ -170,7 +167,7 @@ public:
 		capacity = other.capacity;
 		size = other.size;
 		delete[] ptr;
-		ptr = new int[size];
+		ptr = new Complex[size];
 		for (int i = 0; i < capacity; i++)
 			ptr[i] = other.ptr[i];
 		other.ptr = nullptr;

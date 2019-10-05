@@ -116,12 +116,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MVC.cpp" />
-    <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="StackIterator.cpp" />
+    <ClCompile Include="Visitor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Complex.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Stack.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Visitor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Stack.rc" />
